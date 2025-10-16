@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bird Party - Official Website</title>
+    <style>
+        :root {
+            --primary: #FFD700;
+            --secondary: #2196F3;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--dark), #4A0404);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, var(--dark), #4A0404);
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            color: white;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--dark);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid var(--primary);
+            margin: 0.5rem;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--primary);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .telegram-btn {
+            background-color: #0088cc;
+            border-color: #0088cc;
+            color: white;
+        }
+
+        .telegram-btn:hover {
+            background-color: transparent;
+            color: #0088cc;
+        }
+
+        .fullscreen-btn {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px 40px;
+            margin-top: 1.5rem;
+        }
+
+        .fullscreen-btn:hover {
+            background-color: transparent;
+            color: #4CAF50;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: var(--dark);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .screenshots {
+            background-color: #f1f1f1;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: transform 0.3s;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .telegram-section {
+            background-color: #f8f9fa;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .fullscreen-section {
+            background: linear-gradient(135deg, var(--dark), #4A0404);
+            color: white;
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .game-container {
+            width: 100%;
+            height: 600px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .game-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-container {
+                height: 400px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">BIRD PARTY</div>
+                <div class="nav-links">
+                    <a href="#about">About the Game</a>
+                    <a href="#features">Features</a>
+                    <a href="#screenshots">Screenshots</a>
+                    <a href="#download">Download</a>
+                    <a href="#play">Play Now</a>
+                    <a href="#telegram">Telegram</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Bird Party</h1>
+            <p>Embark on an adventure-filled journey with our fun bird-flying game!</p>
+            <div>
+                <a href="#download" class="btn"><i class="fas fa-download"></i>DOWNLOAD NOW</a>
+                <a href="#play" class="btn fullscreen-btn"><i class="fas fa-gamepad"></i>PLAY NOW</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="container">
+        <h2 class="section-title">About the Game</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto; line-height: 1.6;">
+            Bird Party is a bird-flying game filled with colorful graphics and fun game mechanics.
+            Advance through different courses by overcoming obstacles, collect gold, and unlock new bird skins.
+            With varying difficulty levels and diverse environments, hours of fun are guaranteed!
+        </p>
+    </section>
+
+    <section id="features" class="container">
+        <h2 class="section-title">Game Features</h2>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h3>Easy Controls</h3>
+                <p>Simple and fluid game mechanics controlled with a single touch</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌈</div>
+                <h3>Multiple Bird Skins</h3>
+                <p>More than 12 different bird skins and special characters</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Reward System</h3>
+                <p>Collect gold to unlock new items from the store</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="screenshots" class="screenshots">
+        <div class="container">
+            <h2 class="section-title">Game Screenshots</h2>
+            <div class="gallery">
+                <img src="Ekran görüntüsü 2025-08-05 020009.png" alt="Bird Party Game Screenshot 1">
+                <img src="Ekran görüntüsü 2025-08-05 020026.png" alt="Bird Party Game Screenshot 2">
+                <img src="Ekran görüntüsü 2025-08-05 020045.png" alt="Bird Party Game Screenshot 3">
+                <img src="Ekran görüntüsü 2025-08-05 020634.png" alt="Bird Party Game Screenshot 4">
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="container">
+        <h2 class="section-title">Download</h2>
+        <div style="text-align: center;">
+            <p style="margin-bottom: 2rem;">Download Bird Party now and join the fun!</p>
+            <div class="download-buttons">
+                <a href="https://drive.google.com/file/d/1FgMnAXK-dEJYmlaIiCXJilh8n7JyJGlb/view?usp=sharing" class="btn" target="_blank">
+                    <i class="fab fa-windows"></i> Download for Windows
+                </a>
+                <a href="https://drive.google.com/file/d/1PIsN8ttQGQ0dLawyDl0DGYL1JTMz9FD6/view?usp=sharing" class="btn" target="_blank">
+                    <i class="fab fa-android"></i> Download for Android
+                </a>
+            </div>
+            <div style="margin-top: 2rem; color: #666; font-size: 0.9rem;">
+                <i class="fas fa-exclamation-triangle"></i> The download will be performed via Google Drive.
+            </div>
+        </div>
+    </section>
+
+    <section id="play" class="fullscreen-section">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Play Bird Party Now</h2>
+            <p style="margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Play Bird Party directly in your browser! The game is embedded below.
+            </p>
+            
+            <div class="game-container">
+                <iframe src="https://bulbay35.github.io/Birdi/" class="game-frame" id="game-frame"></iframe>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <button class="btn fullscreen-btn" id="enter-fullscreen">
+                    <i class="fas fa-expand"></i> ENTER FULLSCREEN MODE
+                </button>
+                <button class="btn" id="refresh-game">
+                    <i class="fas fa-redo"></i> REFRESH GAME
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="telegram" class="telegram-section">
+        <div class="container">
+            <h2 class="section-title">Telegram Announcement Group</h2>
+            <p style="margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Join our Telegram group to follow all updates and announcements about the game!
+            </p>
+            <a href="https://t.me/+nnFXwvoxeZU5ZDE0" class="btn telegram-btn" target="_blank">
+                <i class="fab fa-telegram"></i> Join Telegram Group
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="logo" style="margin-bottom: 1rem;">BIRD PARTY</div>
+            <p>© 2023 Bulbay Studios. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://www.instagram.com/talhabulut2012/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@talha.bulut789" target="_blank"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.youtube.com/@irontalha12" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://t.me/+tmVJa0chY99lNzNk" target="_blank"><i class="fab fa-telegram"></i></a>
+                <a href="https://discord.gg/smRKHj7a" target="_blank"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Sticky header on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            header.classList.toggle('sticky', window.scrollY > 0);
+        });
+
+        // Fullscreen functionality
+        document.getElementById('enter-fullscreen').addEventListener('click', function() {
+            const gameContainer = document.querySelector('.game-container');
+            
+            if (gameContainer.requestFullscreen) {
+                gameContainer.requestFullscreen();
+            } else if (gameContainer.webkitRequestFullscreen) {
+                gameContainer.webkitRequestFullscreen();
+            } else if (gameContainer.msRequestFullscreen) {
+                gameContainer.msRequestFullscreen();
+            }
+        });
+
+        // Refresh game functionality
+        document.getElementById('refresh-game').addEventListener('click', function() {
+            document.getElementById('game-frame').src = document.getElementById('game-frame').src;
+        });
+    </script>
+</body>
+</html>
