@@ -362,7 +362,7 @@
             <p style="margin-bottom: 2rem;">Download Bird Party now and join the fun!</p>
             <div class="download-buttons">
                 <!-- YENİ WINDOWS LİNKİ (FORM) -->
-                <a href="https://drive.google.com/file/d/1ecqSaFAIcEu6ad8BsemQfhH9KfDqmL4v/view?usp=sharing" class="btn" target="_blank">
+                <a href="https://drive.google.com/file/d/1ecqSaFAIcEu6ad8BsemQfhH9KfDqmL4v/view?usp=drive_link" class="btn" target="_blank">
                     <i class="fab fa-windows"></i> Download for Windows
                 </a>
                 <!-- YENİ ANDROID LİNKİ -->
@@ -442,43 +442,120 @@
             header.classList.toggle('sticky', window.scrollY > 0);
         });
 
-        // Universal Fullscreen Functionality (iOS, Android, Desktop compatible)
+        // Tüm cihazlar için tam ekran fonksiyonu - Oyun iframe'i tam ekran yap
         document.getElementById('enter-fullscreen').addEventListener('click', function() {
-            const gameFrame = document.getElementById('game-frame');
+            const gameContainer = document.querySelector('.game-container');
             
-            // Try different fullscreen methods for cross-browser compatibility
-            if (gameFrame.requestFullscreen) {
-                gameFrame.requestFullscreen();
-            } else if (gameFrame.webkitRequestFullscreen) { // Safari, Chrome < 15
-                gameFrame.webkitRequestFullscreen();
-            } else if (gameFrame.webkitEnterFullscreen) { // iOS Safari
-                gameFrame.webkitEnterFullscreen();
-            } else if (gameFrame.mozRequestFullScreen) { // Firefox
-                gameFrame.mozRequestFullScreen();
-            } else if (gameFrame.msRequestFullscreen) { // IE/Edge
-                gameFrame.msRequestFullscreen();
-            } else if (gameFrame.webkitEnterFullscreen) { // iOS
-                gameFrame.webkitEnterFullscreen();
-            } else if (gameFrame.webkitEnterFullScreen) { // Older iOS
-                gameFrame.webkitEnterFullScreen();
+            // Önce iframe'e odaklan
+            const gameFrame = document.getElementById('game-frame');
+            gameFrame.focus();
+            
+            // Tam ekran yap
+            if (gameContainer.requestFullscreen) {
+                gameContainer.requestFullscreen().catch(err => {
+                    console.log("Fullscreen error:", err);
+                    // Fallback: iframe'i tam ekran yapmayı dene
+                    requestFullscreenForElement(gameContainer);
+                });
+            } else if (gameContainer.webkitRequestFullscreen) {
+                gameContainer.webkitRequestFullscreen();
+            } else if (gameContainer.mozRequestFullScreen) {
+                gameContainer.mozRequestFullScreen();
+            } else if (gameContainer.msRequestFullscreen) {
+                gameContainer.msRequestFullscreen();
             } else {
-                // Fallback: open game in new tab/window
-                window.open(gameFrame.src, '_blank');
-                alert("Fullscreen mode not directly supported. Game opened in new tab.");
+                // Desteklenmiyorsa, iframe'i büyüt
+                makeFullscreenFallback();
             }
         });
 
-        // Refresh game functionality
-        document.getElementById('refresh-game').addEventListener('click', function() {
-            const gameFrame = document.getElementById('game-frame');
-            const currentSrc = gameFrame.src;
-            gameFrame.src = '';
-            setTimeout(() => {
-                gameFrame.src = currentSrc;
-            }, 100);
-        });
+        // Yardımcı fonksiyon: Eleman için tam ekran iste
+        function requestFullscreenForElement(element) {
+            if (element.requestFullscreen) {
+                return element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                return element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) {
+                return element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            } else if (element.msRequestFullscreen) {
+                return element.msRequestFullscreen();
+            }
+        }
 
-        // Handle fullscreen change events
+        // Fallback: iframe'i tam ekran gibi göster
+        function makeFullscreenFallback() {
+            const gameContainer = document.querySelector('.game-container');
+            const gameFrame = document.getElementById('game-frame');
+            
+            // Orijinal boyutları sakla
+            if (!gameContainer.originalStyle) {
+                gameContainer.originalStyle = {
+                    position: gameContainer.style.position,
+                    top: gameContainer.style.top,
+                    left: gameContainer.style.left,
+                    width: gameContainer.style.width,
+                    height: gameContainer.style.height,
+                    zIndex: gameContainer.style.zIndex,
+                    margin: gameContainer.style.margin,
+                    borderRadius: gameContainer.style.borderRadius
+                };
+            }
+            
+            // Tam ekran moduna geç
+            gameContainer.style.position = 'fixed';
+            gameContainer.style.top = '0';
+            gameContainer.style.left = '0';
+            gameContainer.style.width = '100vw';
+            gameContainer.style.height = '100vh';
+            gameContainer.style.zIndex = '9999';
+            gameContainer.style.margin = '0';
+            gameContainer.style.borderRadius = '0';
+            
+            // Çıkış butonunu güncelle
+            document.getElementById('enter-fullscreen').innerHTML = '<i class="fas fa-compress"></i> EXIT FULLSCREEN';
+            document.getElementById('enter-fullscreen').onclick = exitFullscreenFallback;
+            
+            // Oyun iframe'ine odaklan
+            gameFrame.focus();
+            
+            // ESC tuşu ile çıkış
+            document.addEventListener('keydown', handleEscKey);
+        }
+
+        // Fallback tam ekrandan çıkış
+        function exitFullscreenFallback() {
+            const gameContainer = document.querySelector('.game-container');
+            
+            // Orijinal stilini geri yükle
+            if (gameContainer.originalStyle) {
+                gameContainer.style.position = gameContainer.originalStyle.position;
+                gameContainer.style.top = gameContainer.originalStyle.top;
+                gameContainer.style.left = gameContainer.originalStyle.left;
+                gameContainer.style.width = gameContainer.originalStyle.width;
+                gameContainer.style.height = gameContainer.originalStyle.height;
+                gameContainer.style.zIndex = gameContainer.originalStyle.zIndex;
+                gameContainer.style.margin = gameContainer.originalStyle.margin;
+                gameContainer.style.borderRadius = gameContainer.originalStyle.borderRadius;
+            }
+            
+            // Butonu güncelle
+            document.getElementById('enter-fullscreen').innerHTML = '<i class="fas fa-expand"></i> ENTER FULLSCREEN MODE';
+            document.getElementById('enter-fullscreen').onclick = function() {
+                document.getElementById('enter-fullscreen').click();
+            };
+            
+            // ESC tuşu listener'ını kaldır
+            document.removeEventListener('keydown', handleEscKey);
+        }
+
+        // ESC tuşu handler'ı
+        function handleEscKey(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                exitFullscreenFallback();
+            }
+        }
+
+        // Tam ekran değişim olaylarını dinle
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('mozfullscreenchange', handleFullscreenChange);
@@ -496,23 +573,10 @@
                 fullscreenBtn.onclick = exitFullscreen;
             } else {
                 fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> ENTER FULLSCREEN MODE';
-                fullscreenBtn.onclick = enterFullscreen;
-            }
-        }
-
-        function enterFullscreen() {
-            const gameFrame = document.getElementById('game-frame');
-            
-            if (gameFrame.requestFullscreen) {
-                gameFrame.requestFullscreen();
-            } else if (gameFrame.webkitRequestFullscreen) {
-                gameFrame.webkitRequestFullscreen();
-            } else if (gameFrame.webkitEnterFullscreen) {
-                gameFrame.webkitEnterFullscreen();
-            } else if (gameFrame.mozRequestFullScreen) {
-                gameFrame.mozRequestFullScreen();
-            } else if (gameFrame.msRequestFullscreen) {
-                gameFrame.msRequestFullscreen();
+                fullscreenBtn.onclick = function() {
+                    const gameContainer = document.querySelector('.game-container');
+                    requestFullscreenForElement(gameContainer);
+                };
             }
         }
 
@@ -527,6 +591,30 @@
                 document.msExitFullscreen();
             }
         }
+
+        // Refresh game functionality
+        document.getElementById('refresh-game').addEventListener('click', function() {
+            const gameFrame = document.getElementById('game-frame');
+            const currentSrc = gameFrame.src;
+            gameFrame.src = '';
+            setTimeout(() => {
+                gameFrame.src = currentSrc;
+            }, 100);
+        });
+
+        // Sayfa yüklendiğinde iframe'e bazı izinler ver
+        window.addEventListener('load', function() {
+            const gameFrame = document.getElementById('game-frame');
+            
+            // Iframe için tam ekran izni
+            gameFrame.setAttribute('allowfullscreen', 'true');
+            gameFrame.setAttribute('webkitallowfullscreen', 'true');
+            gameFrame.setAttribute('mozallowfullscreen', 'true');
+            gameFrame.setAttribute('allow', 'fullscreen');
+            
+            // Oyun kontrolleri için gerekli izinler
+            gameFrame.setAttribute('allow', 'gamepad; fullscreen');
+        });
     </script>
 </body>
 </html>
